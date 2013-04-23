@@ -1,44 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <time.h>
 #include <errno.h>
 #include <pcap/pcap.h>
 
+#include "func.h"
 #include "process.h"
 
 struct pcaket p;
 struct pcaket *pkt = &p;
+int length;
+char *tmp_pkt;
+
 
 void pkt_process(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes)
 {
-	int i;
+
+	printf("\n\n ############ One New Packet ############### \n");
 	printf("Capture pcaket time is %s", ctime((const time_t *)&h->ts.tv_sec));
 	printf("Cpature pcaket length is %d\n", h->caplen);
 	printf("Pcaket real length is %d\n", h->len);
 
-	printf("Pcaket hex is: \n");
-	for(i = 0; i < h->caplen; i++){
-		if((i+1)%4 == 0){
-			if(((i+1)%8 == 0)){
-				printf("%02x\n", bytes[i]);
-			}else{
-				printf("%02x	", bytes[i]);
-			}
-		}else{
-			printf("%02x ", bytes[i]);
-		}
-	}		
-	printf("\n");
+	length = h->caplen;
+	print_hex((char *)bytes, length);
+
 	process_ether((char *)bytes);
 }
 
 int main(int argc, char **argv)
 {
-	char *strDev;
+	char strDev[16];
 	char errbuf[PCAP_ERRBUF_SIZE];
 	pcap_t *device;
+	char ch;
 
+	if(argc != 3){
+		printf("useage: %s -i eth0\n", argv[0]);
+		exit(1);
+	}
+
+	while((ch = getopt(argc, argv, "i:?")) != -1){
+		switch(ch){
+			case 'i':
+				strcpy(strDev, optarg);
+				break;
+			default:
+				break;
+		}
+	}
+/*	
 	strDev = pcap_lookupdev(errbuf);
 
 	if(!strDev){
@@ -48,18 +60,6 @@ int main(int argc, char **argv)
 		printf("Device %s is aviable\n", strDev);
 	}
 
-	strDev = "wlan0";	
-//	strDev = argv[1];	
-
-/*
- 	 device = pcap_create(strDev, errbuf);
-
-	if(!device){
-		printf("pcap_create() failed with %s\n", errbuf);
-		exit(1);
-	}else{
-		printf("pcap_create successed\n");
-	}
 */
 	memset(errbuf, 0, sizeof(errbuf));
 	device = pcap_open_live(strDev, 65536, 1, 0, errbuf);

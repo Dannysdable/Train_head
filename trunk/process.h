@@ -6,4 +6,9 @@ struct pcaket{
 	struct udphdr *udp_head;
 	char data[0];
 };
+
 void process_ether(char *ether);
+
+void process_ip(char *ip_pkt);
+
+void process_tcp(char *tcp_pkt);
