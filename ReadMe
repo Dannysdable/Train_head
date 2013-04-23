@@ -1,0 +1,4 @@
+Preparing the Environment
+
+#yum install libpcap
+#yum install libpcap-devel
