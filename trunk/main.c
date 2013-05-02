@@ -9,24 +9,24 @@
 #include "func.h"
 #include "process.h"
 
-struct pcaket p;
-struct pcaket *pkt = &p;
 int length;
-char *tmp_pkt;
-
 
 void pkt_process(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes)
 {
-
+/*
 	printf("\n\n ############ One New Packet ############### \n");
-	printf("Capture pcaket time is %s", ctime((const time_t *)&h->ts.tv_sec));
-	printf("Cpature pcaket length is %d\n", h->caplen);
+	printf("Capture packet time is %s", ctime((const time_t *)&h->ts.tv_sec));
+	printf("Cpature packet length is %d\n", h->caplen);
 	printf("Pcaket real length is %d\n", h->len);
-
+*/
 	length = h->caplen;
-	print_hex((char *)bytes, length);
+//	print_hex((char *)bytes, length);
+
+	if(length < 14)
+		return;
 
 	process_ether((char *)bytes);
+
 }
 
 int main(int argc, char **argv)
