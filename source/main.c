@@ -8,18 +8,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<sys/socket.h>
-#include<sys/types.h>
-
 #include<netinet/in.h>
 #include<netinet/ip.h>
 #include<netinet/tcp.h>
 #include<netinet/igmp.h>
 #include<arpa/inet.h>
-/*
-ether.h  if_ether.h  if_tr.h  in.h        ip6.h  ip_icmp.h  udp.h
-icmp6.h  if_fddi.h   igmp.h   in_systm.h  ip.h   tcp.h
-*/
 
+/*
+*/
 
 int main()
 {
@@ -34,8 +30,8 @@ int main()
 	while(1)
 	{
 		fromlen = sizeof(from);
-		bytes_recieved = 
-		recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&from, &fromlen);
+		bytes_recieved = recvfrom(sock, buffer, sizeof(buffer), 0, 
+					(struct sockaddr *)&from, &fromlen);
 		printf("\nBytes received :: %5d\n", bytes_recieved);
 		printf("Source address:: %s\n", inet_ntoa(from.sin_addr));
 
