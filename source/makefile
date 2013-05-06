@@ -1,9 +1,7 @@
 train: main.o
-	gcc -o train main.o
+	gcc -o $@ $? -I ../include/
 
-@echo Being compiled
-
-main.o: main.c main.h
+main.o: main.c 
 	gcc -c main.c -I ../include/
 
 .PHONY: clean

@@ -2,6 +2,7 @@
 * file: main.c
 * 
 * 2013-05-05
+* 
 * if 0 部分为未调试部分
 */
 
@@ -17,40 +18,40 @@
 #include<netinet/igmp.h>
 #endif
 
+
 #include "main.h"
 
 #define INTERFACE "eth0"
+#define MAXBUF 65535
 /*
 */
-#if 0
+
+
+/*Create raw sockets*/
 int Open_Raw_Socket(void);
-int Set_Promisc(char *interface, int sock);
-#endif
 
 int main()
 {
 	int sock, bytes_recieved, fromlen;
-	char buffer[65535];
+	char buffer[MAXBUF];
 	struct sockaddr_in from;
 	struct ip *ip;
 	struct tcp *tcp;
 
-	if ((sock = socket(AF_INET, SOCK_RAW, IPPROTO_TCP)) < 0)
-	{
-		printf("Creat socket faild\n");
-		return 1;
-	}
+	sock = Open_Raw_Socket();
 
+	
 	while (1)
 	{
 		fromlen = sizeof(from);
 		bytes_recieved = recvfrom(sock, buffer, sizeof(buffer), 0, 
 					(struct sockaddr *)&from, &fromlen);
 		printf("\nBytes received :: %5d\n", bytes_recieved);
-		printf("Source address:: %s\n", inet_ntoa(from.sin_addr));
 
 		ip = (struct ip *)buffer;
 
+		printf("Source address:: %s\n", inet_ntoa(ip->ip_source));
+		printf("Source address:: %s\n", inet_ntoa(ip->ip_dest));
 		printf("IP header length :: %d\n", ip->ip_length);
 		printf("Protocol :: %d\n", ip->ip_protocol);
 
@@ -61,7 +62,6 @@ int main()
 	}
 }
 
-#if 0
 /*Create raw sockets*/
 int Open_Raw_Socket()
 {
@@ -74,6 +74,13 @@ int Open_Raw_Socket()
 	}
 	return(sock); 
 }
+/********************Done************************************************/
+/************************************************************************/
+#if 0
+int Set_Promisc(char *interface, int sock);
+Set_Promisc(INTERFACE, sock);
+#endif
+#if 0
 /*Set the network card to promiscuous mode*/
 int Set_Promisc(char *interface, int sock )
 {
