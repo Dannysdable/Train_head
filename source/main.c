@@ -2,6 +2,7 @@
 * file: main.c
 * 
 * 2013-05-05
+* if 0 部分为未调试部分
 */
 
 
@@ -17,13 +18,17 @@
 #endif
 
 #include "main.h"
+
+#define INTERFACE "eth0"
 /*
 */
+#if 0
+int Open_Raw_Socket(void);
+int Set_Promisc(char *interface, int sock);
+#endif
 
 int main()
 {
-#if 0
-#endif
 	int sock, bytes_recieved, fromlen;
 	char buffer[65535];
 	struct sockaddr_in from;
@@ -55,3 +60,44 @@ int main()
 		printf("Dest port :: %d\n", ntohs(tcp->tcp_dest_port));
 	}
 }
+
+#if 0
+/*Create raw sockets*/
+int Open_Raw_Socket()
+{
+	int sock; 
+	if((sock = socket(AF_INET, SOCK_RAW, IPPROTO_TCP)) < 0)
+	{
+		/*Then the socket was not created properly and must die*/
+		perror("The raw socket was not created");
+		return 0;
+	}
+	return(sock); 
+}
+/*Set the network card to promiscuous mode*/
+int Set_Promisc(char *interface, int sock )
+{
+	struct ifreq ifr;
+	strncpy(ifr.ifr_name, interface,strnlen(interface)+1);
+
+	if((ioctl(sock, SIOCGIFFLAGS, &ifr) == -1))
+	{
+		/*Could not retrieve flags for the interface*/
+		perror("Could not retrive flags for the interface");
+		return 0;
+	}
+	printf("The interface is ::: %s\n", interface);
+	perror("Retrieved flags from interface successfully");
+	ifr.ifr_flags |= IFF_PROMISC;
+
+	if (ioctl (sock, SIOCSIFFLAGS, &ifr) == -1 )
+	{
+		/*Could not set the flags on the interface */
+		perror("Could not set the PROMISC flag:");
+		return 0;
+	}
+	printf("Setting interface ::: %s ::: to promisc", interface);
+	
+	return 0;
+}
+#endif
