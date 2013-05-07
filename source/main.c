@@ -49,8 +49,7 @@ main ()
 	struct tcp *tcp;
 
 	//Open_Raw_Socket(sock);
-	//if ((sock = socket (AF_INET, SOCK_RAW, htons (ETH_P_ALL))) < 0)
-	if ((sock = socket (AF_INET, SOCK_RAW, IPPROTO_TCP)) < 0)
+	if ((sock = socket (PF_PACKET, SOCK_RAW, htons (ETH_P_ALL))) < 0)
 	{
 		/*Then the socket was not created properly and must die */
 		perror ("The raw socket was not created");
