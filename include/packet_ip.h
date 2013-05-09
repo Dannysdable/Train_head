@@ -2,7 +2,7 @@
  * IP层
  */
 /* structure of an ip */
-struct ip {
+struct packet_ip {
      unsigned int ip_length:4;   /* Version */
      unsigned int ip_version:4;  /* Internet Header Length;IHL */
      u_int8_t ip_tos;            /* Type of Service;TOS */
