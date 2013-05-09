@@ -1,10 +1,10 @@
 /*
-* file: main.c
-* 
-* 2013-05-05
-* 
-* if 0 部分为未调试部分
-*/
+ * file: main.c
+ * 
+ * 2013-05-05
+ * 
+ * if 0 部分为未调试部分
+ */
 
 
 #include<stdio.h>
@@ -30,7 +30,7 @@
 #define IFF_PROMISC     0x100	/* receive all packets          */
 #define SIOCSIFFLAGS    0x8914	/* set flags                    */
 /*
-*/
+ */
 
 
 /*create raw sockets*/
@@ -38,15 +38,15 @@ int open_raw_socket (int sock);
 
 int set_promisc (char *interface, int sock);
 
-int
+	int
 main ()
 {
 	int sock, bytes_recieved;
 	socklen_t fromlen;
 	char buffer[MAXBUF];
+
 	struct sockaddr_in from;
-	struct ip *ip;
-	struct tcp *tcp;
+	struct packet *packet;
 
 	//Open_Raw_Socket(sock);
 	if ((sock = socket (PF_PACKET, SOCK_RAW, htons (ETH_P_ALL))) < 0)
@@ -65,43 +65,21 @@ main ()
 		bytes_recieved = recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&from, &fromlen);
 		//bytes_recieved = recvfrom (sock, buffer, MAXBUF, 0, NULL, NULL);
 		printf ("\nBytes received :: %5d\n", bytes_recieved);
-
-		printf (" This fake error is in %s on line %d\n ", __FILE__,__LINE__);
-
-		ip = (struct ip *) buffer;
-
-		printf ("Source address:: %s\n", inet_ntoa (ip->ip_source));
-		printf ("Source address:: %s\n", inet_ntoa (ip->ip_dest));
-		printf ("IP header length :: %d\n", ip->ip_length);
-		printf ("Protocol :: %d\n", ip->ip_protocol);
-
-		tcp = (struct tcp *) (buffer + (4 * ip->ip_length));
-
-		printf ("Source port :: %d\n", ntohs (tcp->tcp_source_port));
-		printf ("Dest port :: %d\n", ntohs (tcp->tcp_dest_port));
+		packet = (struct packet *) buffer;
+	
+	
+		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_dest);
+		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_source);
 	}
-}
 
-#if 0
-/*Create raw sockets*/
-int
-Open_Raw_Socket (sock)
-{
-	if ((sock = socket (AF_INET, SOCK_RAW, htons (ETH_P_ALL))) < 0)
-	{
-		/*Then the socket was not created properly and must die */
-		perror ("The raw socket was not created");
-		return 0;
-	}
-	return (sock);
+	return 0;
 }
 
 /********************Done************************************************/
 /************************************************************************/
-#endif
 #if 0
 /*Set the network card to promiscuous mode*/
-int
+	int
 Set_Promisc (char *interface, int sock)
 {
 	struct ifreq ifr;
