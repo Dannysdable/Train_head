@@ -33,12 +33,7 @@
  */
 
 
-/*create raw sockets*/
-int open_raw_socket (int sock);
-
-int set_promisc (char *interface, int sock);
-
-	int
+int
 main ()
 {
 	int sock, bytes_recieved;
@@ -48,7 +43,7 @@ main ()
 	struct sockaddr_in from;
 	struct packet *packet;
 
-	//Open_Raw_Socket(sock);
+	/* Create raw socket */
 	if ((sock = socket (PF_PACKET, SOCK_RAW, htons (ETH_P_ALL))) < 0)
 	{
 		/*Then the socket was not created properly and must die */
@@ -56,7 +51,6 @@ main ()
 		return 0;
 	}
 
-	//Set_Promisc(INTERFACE, sock);
 
 	while (1)
 	{
@@ -78,6 +72,7 @@ main ()
 /********************Done************************************************/
 /************************************************************************/
 #if 0
+//int set_promisc (char *interface, int sock);
 /*Set the network card to promiscuous mode*/
 	int
 Set_Promisc (char *interface, int sock)
