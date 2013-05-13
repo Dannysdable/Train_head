@@ -8,6 +8,7 @@
 
 
 #include<stdio.h>
+#include<stdlib.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
@@ -32,10 +33,42 @@
 /*
  */
 
-
-int
-main ()
+char * get_data_between(char *src, char *begin, char *end, int src_len)
 {
+	char *tmp_begin, *tmp_end, *tmp;
+	if(src == NULL || begin == NULL ){
+		return NULL;
+	}
+
+	tmp_begin = strstr(src, begin);
+	if(tmp_begin == NULL){
+		printf("Not find\n");
+		return NULL;
+	}
+
+	tmp_end = strstr(tmp_begin, end);
+	if(tmp_end != NULL){
+		*tmp_end='\0';
+	}
+	tmp = tmp_begin + strlen(begin);
+
+	return tmp;	
+}
+
+void get_url(char *data, int len)
+{
+	char *url = (char *)malloc(256);
+	memset(url, 0, 256);
+	url = get_data_between(data, "Host: ", "\r\n", len);
+	printf("url is %s\n", url);
+
+	free(url);
+}
+
+int main ()
+{
+	char *data;
+	int data_len;
 	int sock, bytes_recieved;
 	socklen_t fromlen;
 	char buffer[MAXBUF];
@@ -60,10 +93,22 @@ main ()
 		//bytes_recieved = recvfrom (sock, buffer, MAXBUF, 0, NULL, NULL);
 		printf ("\nBytes received :: %5d\n", bytes_recieved);
 		packet = (struct packet *) buffer;
-	
-	
+
+
 		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_dest);
 		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_source);
+
+
+		data = packet->data;	
+		data_len = bytes_recieved - sizeof(struct packet);
+
+		if(data_len < 16){
+			continue;
+		}
+
+		printf("data = %s\n", data);
+		printf("data_len = %d\n", data_len);	
+		get_url(data, data_len);
 	}
 
 	return 0;

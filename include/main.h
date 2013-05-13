@@ -69,6 +69,7 @@ struct packet {
 	struct packet_ethhdr eth;
 	struct packet_ip ip;
 	struct packet_tcp tcp;
+	char data[0];
 };
 
 /*
