@@ -57,12 +57,10 @@ char * get_data_between(char *src, char *begin, char *end, int src_len)
 
 void get_url(char *data, int len)
 {
-	char *url = (char *)malloc(256);
-	memset(url, 0, 256);
+	char *url;
 	url = get_data_between(data, "Host: ", "\r\n", len);
 	printf("url is %s\n", url);
 
-	free(url);
 }
 
 int main ()
