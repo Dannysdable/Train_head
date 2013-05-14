@@ -34,12 +34,12 @@
 #define IFF_PROMISC     0x100	/* receive all packets          */
 #define SIOCSIFFLAGS    0x8914	/* set flags                    */
 /*
- */
+*/
 
 int main ()
 {
 	char *data;
-	int data_len;
+	int data_len, i;
 	int sock, bytes_recieved;
 	socklen_t fromlen;
 	char buffer[MAXBUF];
@@ -66,8 +66,26 @@ int main ()
 		packet = (struct packet *) buffer;
 
 
-		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_dest);
-		printf ("Source address :: %06x\n", (unsigned int)packet->eth.h_source);
+
+		printf ("Destination address :");
+		for(i=0; i<6; i++){
+			if(i != 5){
+				printf("%02X:", packet->eth.h_dest[i]);
+			}else{
+				printf("%02X\n", packet->eth.h_dest[i]);
+			}
+		}
+
+		printf ("Source address :");
+		for(i=0; i<6; i++){
+			if(i != 5){
+				printf("%02X:", packet->eth.h_source[i]);
+			}else{
+				printf("%02X\n", packet->eth.h_source[i]);
+			}
+		}
+		//		printf ("Destination address :: %12x\n", packet->eth.h_dest);
+		//		printf ("Source      address :: %12x\n", packet->eth.h_source);
 
 
 		data = packet->data;	
