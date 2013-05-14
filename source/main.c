@@ -84,8 +84,6 @@ int main ()
 				printf("%02X\n", packet->eth.h_source[i]);
 			}
 		}
-		//		printf ("Destination address :: %12x\n", packet->eth.h_dest);
-		//		printf ("Source      address :: %12x\n", packet->eth.h_source);
 
 
 		data = packet->data;	
@@ -95,8 +93,8 @@ int main ()
 			continue;
 		}
 
-		printf("data = %s\n", data);
-		printf("data_len = %d\n", data_len);	
+//		printf("data = %s\n", data);
+//		printf("data_len = %d\n", data_len);	
 		get_url(data, data_len);
 	}
 
