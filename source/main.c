@@ -14,6 +14,7 @@
 #include<arpa/inet.h>
 #include<string.h>
 #include<sys/types.h>
+
 #if 0
 #include<stdlib.h>
 #include<netinet/ip.h>
@@ -21,7 +22,9 @@
 #include<netinet/igmp.h>
 #endif
 
-
+#include "packet.h"
+#include "func.h"
+#include "process.h"
 #include "main.h"
 
 #define INTERFACE 	"eth0"
@@ -32,36 +35,6 @@
 #define SIOCSIFFLAGS    0x8914	/* set flags                    */
 /*
  */
-
-char * get_data_between(char *src, char *begin, char *end, int src_len)
-{
-	char *tmp_begin, *tmp_end, *tmp;
-	if(src == NULL || begin == NULL ){
-		return NULL;
-	}
-
-	tmp_begin = strstr(src, begin);
-	if(tmp_begin == NULL){
-		printf("Not find\n");
-		return NULL;
-	}
-
-	tmp_end = strstr(tmp_begin, end);
-	if(tmp_end != NULL){
-		*tmp_end='\0';
-	}
-	tmp = tmp_begin + strlen(begin);
-
-	return tmp;	
-}
-
-void get_url(char *data, int len)
-{
-	char *url;
-	url = get_data_between(data, "Host: ", "\r\n", len);
-	printf("url is %s\n", url);
-
-}
 
 int main ()
 {

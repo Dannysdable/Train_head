@@ -1,6 +1,8 @@
+#if 0
 #include <packet_eth.h>
 #include <packet_ip.h>
 #include <packet_tcp.h>
+#endif
 
 
 #if 0
@@ -62,6 +64,7 @@ struct tcp {
 
 #endif
 
+#if 0
 /*
  * packet struct data
  */
@@ -75,6 +78,9 @@ struct packet {
 /*
  *=============================================================================
  */
+
+#endif
+
 #if 0
 struct ifmap 
 {
